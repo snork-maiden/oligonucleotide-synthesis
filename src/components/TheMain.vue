@@ -1,14 +1,13 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import TheSequenceInput from "./TheSequenceInput.vue";
+import TheSynthesizer from "./TheSynthesizer.vue";
+import TheTaskQueue from "./TheTaskQueue.vue";
+</script>
 
 <template>
-  <label class="sequence">
-    <span class="label">Введите последовательность</span>
-    <input type="text" class="sequence" />
-  </label>
-  <div class="warning">Длина от 6 до 120 символов</div>
-  <div class="warning">Только символы a, t, g, c</div>
-  <button type="button" class="add">Добавить</button>
+  <TheSequenceInput />
+  <TheTaskQueue />
+  <TheSynthesizer/>
 </template>
 
-<script scoped>
-</script>
+<script scoped></script>
