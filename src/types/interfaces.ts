@@ -3,7 +3,7 @@ import type { Nucleotide, Status } from "./types";
 export interface Sequence {
   sequence: string;
   status: TaskStatus;
-  index: number;
+  id: number;
 }
 
 type TaskStatus = "waiting" | "progress" | "complete";
@@ -16,5 +16,5 @@ export interface Synthesizer {
 interface Letter {
   letter: Nucleotide;
   status: TaskStatus;
-  index: number;
+  id: number;
 }
