@@ -16,7 +16,10 @@ export const useSynthesizerStore = defineStore("synthesizer", () => {
   );
 
   let isWaitingSequences = computed(() => !!waitingSequences.value.length);
-  let synthesizerStatus = computed(() => synthesizer.value.status);
+
+  function getSynthesizer() {
+    return synthesizer.value;
+  }
 
   function addSequence(sequence: string, timestamp: number) {
     sequences.value.push({
@@ -50,6 +53,10 @@ export const useSynthesizerStore = defineStore("synthesizer", () => {
     );
     if (!sequence) return;
     sequence.status = "progress";
+
+    synthesizer.value.sequence = sequence.sequence;
+    synthesizer.value.currentLetterIndex = 0;
+    synthesizer.value.status = "занят";
     //add sequence array to synthesizer, start the timer
   }
 
@@ -64,7 +71,7 @@ export const useSynthesizerStore = defineStore("synthesizer", () => {
 
   // type TaskStatus = "waiting" | "progress" | "complete";
   return {
-    synthesizerStatus,
+    getSynthesizer,
     addSequence,
     editSequence,
     deleteSequence,
