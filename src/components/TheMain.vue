@@ -2,12 +2,16 @@
 import TheSequenceInput from "./TheSequenceInput.vue";
 import TheSynthesizer from "./TheSynthesizer.vue";
 import TheTaskQueue from "./TheTaskQueue.vue";
+
+import { useSynthesizerStore } from "@/stores/synthesizer";
+
+const store = useSynthesizerStore();
 </script>
 
 <template>
   <TheSequenceInput />
-  <TheTaskQueue />
-  <TheSynthesizer/>
+  <TheTaskQueue v-if="store.isWaitingSequences" />
+  <TheSynthesizer />
 </template>
 
-<script scoped></script>
+<style scoped></style>

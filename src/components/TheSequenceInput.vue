@@ -16,7 +16,7 @@ function add() {
     return;
   }
   isLengthError.value = false;
-  store.addSequence(sequence.value);
+  store.addSequence(sequence.value, Date.now());
   sequence.value = "";
 }
 </script>

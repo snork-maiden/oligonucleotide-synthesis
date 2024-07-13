@@ -1,16 +1,20 @@
 <script setup lang="ts">
+import { useSynthesizerStore } from "@/stores/synthesizer";
 import { ref } from "vue";
 
-let status = ref("бездействует");
+const store = useSynthesizerStore();
 </script>
 
 <template>
   <div class="synthesizer">
-    <div class="status">{{ status }}</div>
-    <div class="progress">
-      atgc
-    </div>
+    <div class="status">Статус: {{ store.synthesizerStatus }}</div>
+    <div class="progress">atgc</div>
   </div>
 </template>
 
-<script scoped></script>
+<style scoped>
+.synthesizer {
+  border: 2px solid;
+  padding: 2em;
+}
+</style>
