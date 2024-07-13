@@ -1,6 +1,7 @@
 import { ref, computed, type Ref } from "vue";
 import { defineStore } from "pinia";
 import type { Sequence, Synthesizer } from "@/types/interfaces";
+import { createTimer } from "@/utils/timer";
 
 export const useSynthesizerStore = defineStore("synthesizer", () => {
   const synthesizer: Ref<Synthesizer> = ref({
@@ -49,9 +50,7 @@ export const useSynthesizerStore = defineStore("synthesizer", () => {
   }
 
   function takeNextSequence() {
-    const sequence = getSequenceByTimestamp(
-      waitingSequences.value[0].timestamp
-    );
+    const sequence = waitingSequences.value[0];
     if (!sequence) return;
     sequence.status = "progress";
 
@@ -65,38 +64,22 @@ export const useSynthesizerStore = defineStore("synthesizer", () => {
   }
 
   function processSequence() {
-    let countStop: any;
     const seconds = synthesizer.value.secondsLeft;
-    setTimer();
+    if (seconds === null) {
+      throw new Error("Seconds not provided");
+    }
 
-    function setTimer() {
-      if (seconds === null) {
-        throw Error;
-      }
-      clearInterval(countStop);
-      const start = Date.now();
-      const end = new Date(start + seconds * 1000);
-
-      function setCountdown() {
-        const msecondsLeft = new Date(
-          Math.round((+end - Date.now()) / 1000) * 1000
-        );
-        let secondsLeft = +msecondsLeft / 1000;
-        if (secondsLeft < 0) {
-          stopTimer();
-          clearInterval(countStop);
-          return;
-        }
+    createTimer(
+      seconds,
+      (secondsLeft) => {
         synthesizer.value.secondsLeft = secondsLeft;
         synthesizer.value.currentLetterIndex =
           synthesizer.value.sequence!.length - secondsLeft;
-        if ((secondsLeft = 0)) {
-          stopTimer();
-        }
+      },
+      () => {
+        stopTimer();
       }
-      setCountdown();
-      countStop = setInterval(setCountdown, 1000);
-    }
+    );
   }
 
   function stopTimer() {
@@ -108,12 +91,15 @@ export const useSynthesizerStore = defineStore("synthesizer", () => {
     });
     synthesizerWorkStake++;
 
-    if (synthesizerWorkStake === 5) {
-      synthesizerWorkStake = 0;
+    if (synthesizerWorkStake === 4) {
       startService();
       return;
     }
 
+    workWithQueue();
+  }
+
+  function workWithQueue() {
     if (!isWaitingSequences.value) {
       synthesizer.value = {
         sequence: null,
@@ -124,11 +110,29 @@ export const useSynthesizerStore = defineStore("synthesizer", () => {
       return;
     }
 
-    console.log(synthesizerWorkStake, isWaitingSequences.value);
     takeNextSequence();
   }
 
-  function startService() {}
+  function startService() {
+    synthesizerWorkStake = 0;
+
+    const SERVICE_TIME = 3;
+    synthesizer.value = {
+      sequence: null,
+      currentLetterIndex: null,
+      status: "на обслуживании",
+      secondsLeft: SERVICE_TIME,
+    };
+    createTimer(
+      SERVICE_TIME,
+      (secondsLeft) => {
+        synthesizer.value.secondsLeft = secondsLeft;
+      },
+      () => {
+        workWithQueue();
+      }
+    );
+  }
 
   function activateSynthesizer() {
     synthesizer.value.status = "занят";
