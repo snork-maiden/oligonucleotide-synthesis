@@ -81,18 +81,54 @@ export const useSynthesizerStore = defineStore("synthesizer", () => {
         const msecondsLeft = new Date(
           Math.round((+end - Date.now()) / 1000) * 1000
         );
-        const secondsLeft = +msecondsLeft/1000
-        if (+secondsLeft < 0) {
+        let secondsLeft = +msecondsLeft / 1000;
+        if (secondsLeft < 0) {
+          stopTimer();
           clearInterval(countStop);
           return;
         }
         synthesizer.value.secondsLeft = secondsLeft;
-        synthesizer.value.currentLetterIndex = synthesizer.value.sequence!.length - secondsLeft
+        synthesizer.value.currentLetterIndex =
+          synthesizer.value.sequence!.length - secondsLeft;
+        if ((secondsLeft = 0)) {
+          stopTimer();
+        }
       }
       setCountdown();
       countStop = setInterval(setCountdown, 1000);
     }
   }
+
+  function stopTimer() {
+    sequences.value = sequences.value.map((item) => {
+      if (item.status === "progress") {
+        return { ...item, status: "complete" };
+      }
+      return item;
+    });
+    synthesizerWorkStake++;
+
+    if (synthesizerWorkStake === 5) {
+      synthesizerWorkStake = 0;
+      startService();
+      return;
+    }
+
+    if (!isWaitingSequences.value) {
+      synthesizer.value = {
+        sequence: null,
+        currentLetterIndex: null,
+        status: "бездействует",
+        secondsLeft: null,
+      };
+      return;
+    }
+
+    console.log(synthesizerWorkStake, isWaitingSequences.value);
+    takeNextSequence();
+  }
+
+  function startService() {}
 
   function activateSynthesizer() {
     synthesizer.value.status = "занят";

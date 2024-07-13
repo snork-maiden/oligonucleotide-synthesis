@@ -6,10 +6,6 @@ const store = useSynthesizerStore();
 
 let sequence: Ref<string> = ref("");
 
-watch(sequence, (string) => {
-  sequence.value = string.replace(/[^atgc]/gi, "");
-});
-
 function add() {
   store.addSequence(sequence.value, Date.now());
   sequence.value = "";
