@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useSynthesizerStore } from "@/stores/synthesizer";
-import { computed, ref, type Ref } from "vue";
+import { computed, ref, watch, type ModelRef, type Ref } from "vue";
+import NucleotideInput from "./NucleotideInput.vue";
 
 const store = useSynthesizerStore();
 
@@ -13,9 +14,13 @@ const props = defineProps({
 
 let isEditing = ref(false);
 const sequenceData = ref(store.getSequenceByTimestamp(props.timestamp));
-const sequence = computed(() => sequenceData.value?.sequence);
-let newSequence: Ref<string> = ref('');
+const sequence = computed(() => sequenceData.value?.sequence || "");
+let newSequence: Ref<string> = ref("");
 
+watch(isEditing, (value) => {
+  if (!value) return;
+  newSequence.value = sequence.value;
+});
 function saveChanges() {
   isEditing.value = false;
   if (sequence.value === newSequence.value) return;
@@ -25,16 +30,18 @@ function saveChanges() {
 
 <template>
   <li class="item" v-if="sequence">
-    <div class="task">{{ newSequence || sequence }}</div>
-    <button class="button" @click="store.deleteSequence(timestamp)">Удалить</button>
-    <button class="button" v-if="!isEditing" @click="isEditing = true">
-      Редактировать
-    </button>
-    <template v-else>
-      <input type="text" name="" id="">
-      <button class="button" @click="isEditing = false">Отменить</button>
-      <button class="button" @click="saveChanges">Сохранить</button>
+    <template v-if="!isEditing">
+      <div class="task">{{ sequence }}</div>
+      <button class="button" @click="store.deleteSequence(timestamp)">
+        Удалить
+      </button>
+      <button class="button" @click="isEditing = true">Редактировать</button>
     </template>
+    <form v-else @submit.prevent="saveChanges">
+      <NucleotideInput v-model="newSequence" />
+      <button class="button" @click="isEditing = false">Отменить</button>
+      <button class="submit">Сохранить</button>
+    </form>
     <!-- + add status select -->
   </li>
 </template>
