@@ -7,6 +7,7 @@ export const useSynthesizerStore = defineStore("synthesizer", () => {
     sequence: null,
     status: "бездействует",
     currentLetterIndex: null,
+    secondsLeft: null,
   });
   const sequences: Ref<Sequence[]> = ref([]);
   let synthesizerWorkStake = 0;
@@ -54,10 +55,43 @@ export const useSynthesizerStore = defineStore("synthesizer", () => {
     if (!sequence) return;
     sequence.status = "progress";
 
-    synthesizer.value.sequence = sequence.sequence;
-    synthesizer.value.currentLetterIndex = 0;
-    synthesizer.value.status = "занят";
-    //add sequence array to synthesizer, start the timer
+    synthesizer.value = {
+      sequence: sequence.sequence,
+      currentLetterIndex: 0,
+      status: "занят",
+      secondsLeft: sequence.sequence.length,
+    };
+    processSequence();
+  }
+
+  function processSequence() {
+    let countStop: any;
+    const seconds = synthesizer.value.secondsLeft;
+    setTimer();
+
+    function setTimer() {
+      if (seconds === null) {
+        throw Error;
+      }
+      clearInterval(countStop);
+      const start = Date.now();
+      const end = new Date(start + seconds * 1000);
+
+      function setCountdown() {
+        const msecondsLeft = new Date(
+          Math.round((+end - Date.now()) / 1000) * 1000
+        );
+        const secondsLeft = +msecondsLeft/1000
+        if (+secondsLeft < 0) {
+          clearInterval(countStop);
+          return;
+        }
+        synthesizer.value.secondsLeft = secondsLeft;
+        synthesizer.value.currentLetterIndex = synthesizer.value.sequence!.length - secondsLeft
+      }
+      setCountdown();
+      countStop = setInterval(setCountdown, 1000);
+    }
   }
 
   function activateSynthesizer() {

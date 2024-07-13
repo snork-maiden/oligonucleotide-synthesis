@@ -11,7 +11,8 @@ type TaskStatus = "waiting" | "progress" | "complete";
 export interface Synthesizer {
   sequence: string | null;
   status: Status;
-  currentLetterIndex: number | null
+  currentLetterIndex: number | null;
+  secondsLeft: number | null;
 }
 
 // interface Letter {
