@@ -12,6 +12,7 @@ export const useSynthesizerStore = defineStore("synthesizer", () => {
   });
   const sequences: Ref<Sequence[]> = ref([]);
   let synthesizerWorkStake = 0;
+  const SERVICE_TIME = 3;
 
   let waitingSequences = computed(() =>
     sequences.value.filter((item) => item.status === "waiting")
@@ -30,7 +31,7 @@ export const useSynthesizerStore = defineStore("synthesizer", () => {
       timestamp,
     });
     if (synthesizer.value.status === "бездействует") {
-      activateSynthesizer();
+      takeNextSequence();
     }
   }
 
@@ -90,8 +91,8 @@ export const useSynthesizerStore = defineStore("synthesizer", () => {
       return item;
     });
     synthesizerWorkStake++;
-
-    if (synthesizerWorkStake === 4) {
+    console.log(synthesizerWorkStake);
+    if (synthesizerWorkStake === 5) {
       startService();
       return;
     }
@@ -116,7 +117,6 @@ export const useSynthesizerStore = defineStore("synthesizer", () => {
   function startService() {
     synthesizerWorkStake = 0;
 
-    const SERVICE_TIME = 3;
     synthesizer.value = {
       sequence: null,
       currentLetterIndex: null,
@@ -134,16 +134,10 @@ export const useSynthesizerStore = defineStore("synthesizer", () => {
     );
   }
 
-  function activateSynthesizer() {
-    synthesizer.value.status = "занят";
-    takeNextSequence();
-  }
-
   function getSequenceByTimestamp(timestamp: number): Sequence | null {
     return sequences.value.find((item) => item.timestamp === timestamp) ?? null;
   }
 
-  // type TaskStatus = "waiting" | "progress" | "complete";
   return {
     getSynthesizer,
     addSequence,

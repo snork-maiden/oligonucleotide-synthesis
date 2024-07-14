@@ -1,14 +1,10 @@
 <script setup lang="ts">
 import { ref, watch, type ModelRef, type Ref } from "vue";
 
-// const props = defineProps({
-//   sequence: {
-//     type: String,
-//     required: false,
-//     default: ''
-//   }
-// })
-let sequence: ModelRef<string> = defineModel({ default: '' });
+const emit = defineEmits<{
+  (e: "submit"): void;
+}>();
+let sequence: ModelRef<string> = defineModel({ default: "" });
 
 watch(sequence, (string) => {
   sequence.value = string.replace(/[^atgc]/gi, "");
@@ -16,13 +12,19 @@ watch(sequence, (string) => {
 </script>
 
 <template>
-  <input
-    type="text"
-    class="sequence"
+  <textarea
     v-model="sequence"
+    class="sequence"
     minlength="6"
     maxlength="120"
-  />
+    @keydown.enter="emit('submit')"
+    wrap="hard"
+  ></textarea>
 </template>
 
-<style scoped></style>
+<style scoped>
+.sequence {
+  width: 100%;
+  word-wrap: break-word;
+}
+</style>

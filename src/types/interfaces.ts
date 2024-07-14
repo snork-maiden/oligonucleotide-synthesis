@@ -14,9 +14,3 @@ export interface Synthesizer {
   currentLetterIndex: number | null;
   secondsLeft: number | null;
 }
-
-// interface Letter {
-//   letter: Nucleotide;
-//   status: TaskStatus;
-//   id: number;
-// }

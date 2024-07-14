@@ -13,14 +13,29 @@ function add() {
 </script>
 
 <template>
-  <div class="warning">Только символы a, t, g, c</div>
-  <form @submit.prevent="add">
+  <form @submit.prevent="add" class="form">
     <label class="sequence">
-      <span class="label">Введите последовательность</span>
-      <NucleotideInput v-model="sequence" />
+      <span class="label">Введите последовательность:</span>
+      <NucleotideInput v-model="sequence" @submit="add" class="input"/>
     </label>
+    <div class="warning">Только нуклеотиды a, t, g, c</div>
     <button type="submit" class="add">Добавить</button>
   </form>
 </template>
 
-<style scoped></style>
+<style scoped>
+
+.form {
+  display: grid;
+  gap: 0.5em 1em;
+}
+.sequence {
+  display: grid;
+  gap: 0.5em;
+}
+
+.input {
+  width: 500px;
+  height: 5.2em;
+}
+</style>

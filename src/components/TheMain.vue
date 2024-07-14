@@ -9,9 +9,19 @@ const store = useSynthesizerStore();
 </script>
 
 <template>
+  <h1 class="title">Синтезатор олигонуклеотидов</h1>
+
   <TheSequenceInput />
   <TheTaskQueue v-if="store.isWaitingSequences" />
-  <TheSynthesizer />
+  <TheSynthesizer class="synthesizer" />
 </template>
 
-<style scoped></style>
+<style scoped>
+.synthesizer {
+  margin-top: auto;
+}
+
+.title {
+  font-size: 2.3em;
+}
+</style>

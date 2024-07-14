@@ -1,6 +1,6 @@
 :root {
-  --color-text: white;
-  --color-background: rgb(2, 2, 70);
+  --color-text: black;
+  --color-background: hsl(45, 14%, 98%);
 }
 *,
 *::before,
@@ -10,7 +10,7 @@
   font-weight: normal;
 }
 
-button, input {
+button, textarea {
   font: inherit
 }
 

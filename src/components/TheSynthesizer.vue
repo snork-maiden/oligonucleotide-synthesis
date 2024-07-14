@@ -16,7 +16,10 @@ function getClass(index: number) {
 
 <template>
   <div class="synthesizer">
-    <div class="status">Статус: {{ store.getSynthesizer().status }}</div>
+    <div class="status">
+      <span class="status-title"> Статус: </span>
+      {{ store.getSynthesizer().status }}
+    </div>
     <div class="progress" v-if="store.getSynthesizer().sequence">
       <span
         class="letter"
@@ -31,12 +34,27 @@ function getClass(index: number) {
 
 <style scoped>
 .synthesizer {
-  border: 2px solid;
   padding: 2em;
+  background-color: rgb(202, 207, 204);
+  width: 100%;
+  max-width: 1000px;
+  aspect-ratio: 3.5/1;
+  display: grid;
+}
+
+.status {
+  text-align: center;
+  text-transform: uppercase;
+  margin-bottom: 0.5em;
+}
+
+.status-title {
+  font-weight: 600
 }
 
 .progress {
   display: flex;
+  align-items: start;
   flex-wrap: wrap;
   gap: 0.1em;
   color: grey;
@@ -47,7 +65,7 @@ function getClass(index: number) {
 }
 
 .current {
-  outline: 1px solid blueviolet;
+  outline: 2px solid white;
   color: var(--color-text);
 }
 
