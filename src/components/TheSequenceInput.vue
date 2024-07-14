@@ -35,7 +35,7 @@ function add() {
 }
 
 .input {
-  width: 500px;
+  width: min(500px, 80vw);
   height: 5.2em;
 }
 </style>

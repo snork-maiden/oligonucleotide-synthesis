@@ -10,12 +10,17 @@ import TheMain from "../components/TheMain.vue";
 
 <style scoped>
 .main {
-  height: 100vh;
-  max-height: 100vh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 2em;
   gap: 2em;
+}
+
+@media screen and (min-width: 1000px) {
+  .main {
+    max-height: 100vh;
+  }
 }
 </style>

@@ -38,7 +38,11 @@ function saveChanges() {
       <button class="button" @click="isEditing = true">Редактировать</button>
     </template>
     <form v-else @submit.prevent="saveChanges">
-      <NucleotideInput v-model="newSequence" class="task "@submit='saveChanges'/>
+      <NucleotideInput
+        v-model="newSequence"
+        class="task"
+        @submit="saveChanges"
+      />
       <button class="button" @click="isEditing = false">Отменить</button>
       <button class="submit">Сохранить</button>
     </form>
@@ -48,7 +52,7 @@ function saveChanges() {
 
 <style scoped>
 .task {
-  max-width: 600px;
+  max-width: min(600px, 80vw);
   word-wrap: break-word;
 }
 </style>

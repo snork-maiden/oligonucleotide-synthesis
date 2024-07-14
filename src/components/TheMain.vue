@@ -22,6 +22,7 @@ const store = useSynthesizerStore();
 }
 
 .title {
-  font-size: 2.3em;
+  font-size: clamp(1.6em, 5vw, 2.3em);
+  text-align: center;
 }
 </style>

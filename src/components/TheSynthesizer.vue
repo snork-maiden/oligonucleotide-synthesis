@@ -38,8 +38,13 @@ function getClass(index: number) {
   background-color: rgb(202, 207, 204);
   width: 100%;
   max-width: 1000px;
-  aspect-ratio: 3.5/1;
   display: grid;
+
+  @media screen and (min-width: 700px) {
+    .synthesizer {
+      aspect-ratio: 3.5/1;
+    }
+  }
 }
 
 .status {
@@ -49,7 +54,7 @@ function getClass(index: number) {
 }
 
 .status-title {
-  font-weight: 600
+  font-weight: 600;
 }
 
 .progress {
