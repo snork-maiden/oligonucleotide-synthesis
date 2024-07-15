@@ -7,7 +7,7 @@ import type { Priority } from "@/types/types";
 export const useSynthesizerStore = defineStore("synthesizer", () => {
   const synthesizer: Ref<Synthesizer> = ref({
     sequence: null,
-    status: "бездействует",
+    status: "idle",
     currentLetterIndex: null,
     secondsLeft: null,
   });
@@ -74,7 +74,7 @@ export const useSynthesizerStore = defineStore("synthesizer", () => {
       timestamp,
       priority,
     });
-    if (synthesizer.value.status === "бездействует") {
+    if (synthesizer.value.status === "idle") {
       takeNextSequence();
     }
   }
@@ -111,7 +111,7 @@ export const useSynthesizerStore = defineStore("synthesizer", () => {
     synthesizer.value = {
       sequence: sequence.sequence,
       currentLetterIndex: 0,
-      status: "занят",
+      status: "busy",
       secondsLeft: sequence.sequence.length,
     };
     processSequence();
@@ -158,7 +158,7 @@ export const useSynthesizerStore = defineStore("synthesizer", () => {
       synthesizer.value = {
         sequence: null,
         currentLetterIndex: null,
-        status: "бездействует",
+        status: "idle",
         secondsLeft: null,
       };
       return;
@@ -173,7 +173,7 @@ export const useSynthesizerStore = defineStore("synthesizer", () => {
     synthesizer.value = {
       sequence: null,
       currentLetterIndex: null,
-      status: "на обслуживании",
+      status: "service",
       secondsLeft: SERVICE_TIME,
     };
     createTimer(

@@ -13,13 +13,25 @@ function getClass(index: number) {
     done: index < currentIndex,
   };
 }
+
+const statusTranslate = computed(() => {
+  const status = store.getSynthesizer().status;
+  switch (status) {
+    case "idle":
+      return "бездействует";
+    case "busy":
+      return "занят";
+    case "service":
+      return "на обслуживании";
+  }
+});
 </script>
 
 <template>
   <div class="synthesizer">
     <div class="status">
       <span class="status-title"> Статус: </span>
-      {{ store.getSynthesizer().status }}
+      {{ statusTranslate }}
     </div>
     <SynthesizerEndWork v-if="store.totalWorkTime" />
     <div class="progress" v-if="store.getSynthesizer().sequence">
