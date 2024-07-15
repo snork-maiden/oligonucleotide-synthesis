@@ -1,6 +1,7 @@
 :root {
   --color-text: black;
   --color-background: hsl(45, 14%, 98%);
+  --header-height: 3em
 }
 *,
 *::before,
