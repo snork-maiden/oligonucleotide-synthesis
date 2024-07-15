@@ -14,11 +14,33 @@ export const useSynthesizerStore = defineStore("synthesizer", () => {
   let synthesizerWorkStake = 0;
   const SERVICE_TIME = 3;
 
-  let waitingSequences = computed(() =>
+  const waitingSequences = computed(() =>
     sequences.value.filter((item) => item.status === "waiting")
   );
 
-  let isWaitingSequences = computed(() => !!waitingSequences.value.length);
+  const isWaitingSequences = computed((): boolean => !!waitingSequences.value.length);
+
+  const totalServiceTime = computed((): number => {
+    const finalStack = synthesizerWorkStake + waitingSequences.value.length;
+    if (finalStack <= 5) return 0;
+
+    return Math.round(finalStack / 5) * SERVICE_TIME;
+  });
+
+  const secondsToProcessWaiting = computed((): number =>
+    waitingSequences.value.reduce((sum, item) => {
+      return sum + item.sequence.length;
+    }, 0)
+  );
+
+  const totalWorkTime = computed((): number | null => {
+    if (synthesizer.value.secondsLeft === null) return null;
+    return (
+      secondsToProcessWaiting.value +
+      synthesizer.value.secondsLeft +
+      totalServiceTime.value
+    );
+  });
 
   function getSynthesizer() {
     return synthesizer.value;
@@ -146,5 +168,6 @@ export const useSynthesizerStore = defineStore("synthesizer", () => {
     waitingSequences,
     isWaitingSequences,
     getSequenceByTimestamp,
+    totalWorkTime
   };
 });

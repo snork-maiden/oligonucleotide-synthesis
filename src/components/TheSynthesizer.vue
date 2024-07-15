@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useSynthesizerStore } from "@/stores/synthesizer";
 import { computed, ref } from "vue";
+import SynthesizerEndWork from "./SynthesizerEndWork.vue";
 
 const store = useSynthesizerStore();
 
@@ -20,6 +21,7 @@ function getClass(index: number) {
       <span class="status-title"> Статус: </span>
       {{ store.getSynthesizer().status }}
     </div>
+    <SynthesizerEndWork v-if="store.totalWorkTime" />
     <div class="progress" v-if="store.getSynthesizer().sequence">
       <span
         class="letter"
@@ -39,11 +41,11 @@ function getClass(index: number) {
   width: 100%;
   max-width: 1000px;
   display: grid;
+}
 
-  @media screen and (min-width: 700px) {
-    .synthesizer {
-      aspect-ratio: 3.5/1;
-    }
+@media screen and (min-width: 700px) {
+  .synthesizer {
+    aspect-ratio: 3.5/1;
   }
 }
 
