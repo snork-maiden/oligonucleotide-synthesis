@@ -2,6 +2,7 @@ import { ref, computed, type Ref } from "vue";
 import { defineStore } from "pinia";
 import type { Sequence, Synthesizer } from "@/types/interfaces";
 import { createTimer } from "@/utils/timer";
+import type { Priority } from "@/types/types";
 
 export const useSynthesizerStore = defineStore("synthesizer", () => {
   const synthesizer: Ref<Synthesizer> = ref({
@@ -18,7 +19,23 @@ export const useSynthesizerStore = defineStore("synthesizer", () => {
     sequences.value.filter((item) => item.status === "waiting")
   );
 
-  const isWaitingSequences = computed((): boolean => !!waitingSequences.value.length);
+  const sortedWaitingSequences = computed(() => {
+    const highPriority = waitingSequences.value.filter(
+      (item) => item.priority === "high"
+    );
+    const mediumPriority = waitingSequences.value.filter(
+      (item) => item.priority === "medium"
+    );
+    const lowPriority = waitingSequences.value.filter(
+      (item) => item.priority === "low"
+    );
+
+    return [...highPriority, ...mediumPriority, ...lowPriority];
+  });
+
+  const isWaitingSequences = computed(
+    (): boolean => !!waitingSequences.value.length
+  );
 
   const totalServiceTime = computed((): number => {
     const finalStack = synthesizerWorkStake + waitingSequences.value.length;
@@ -46,15 +63,29 @@ export const useSynthesizerStore = defineStore("synthesizer", () => {
     return synthesizer.value;
   }
 
-  function addSequence(sequence: string, timestamp: number) {
+  function addSequence(
+    sequence: string,
+    timestamp: number,
+    priority: Priority = "medium"
+  ) {
     sequences.value.push({
       sequence,
       status: "waiting",
       timestamp,
+      priority,
     });
     if (synthesizer.value.status === "бездействует") {
       takeNextSequence();
     }
+  }
+
+  function changeSequencePriority(
+    timestamp: number,
+    newPriority: Priority
+  ): void {
+    const sequence = getSequenceByTimestamp(timestamp);
+    if (!sequence) return;
+    sequence.priority = newPriority;
   }
 
   function editSequence(timestamp: number, newSequence: string): void {
@@ -73,7 +104,7 @@ export const useSynthesizerStore = defineStore("synthesizer", () => {
   }
 
   function takeNextSequence() {
-    const sequence = waitingSequences.value[0];
+    const sequence = sortedWaitingSequences.value[0];
     if (!sequence) return;
     sequence.status = "progress";
 
@@ -163,11 +194,12 @@ export const useSynthesizerStore = defineStore("synthesizer", () => {
   return {
     getSynthesizer,
     addSequence,
+    changeSequencePriority,
     editSequence,
     deleteSequence,
     waitingSequences,
     isWaitingSequences,
     getSequenceByTimestamp,
-    totalWorkTime
+    totalWorkTime,
   };
 });

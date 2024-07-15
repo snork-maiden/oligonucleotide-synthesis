@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import TheSequenceInput from "./TheSequenceInput.vue";
+import TheAddSequence from "./TheAddSequence.vue";
 import TheSynthesizer from "./TheSynthesizer.vue";
 import TheTaskQueue from "./TheTaskQueue.vue";
 
@@ -11,7 +11,7 @@ const store = useSynthesizerStore();
 <template>
   <h1 class="title">Синтезатор олигонуклеотидов</h1>
 
-  <TheSequenceInput />
+  <TheAddSequence />
   <TheTaskQueue v-if="store.isWaitingSequences" />
   <TheSynthesizer class="synthesizer" />
 </template>

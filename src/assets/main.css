@@ -10,7 +10,7 @@
   font-weight: normal;
 }
 
-button, textarea {
+button, textarea, select {
   font: inherit
 }
 

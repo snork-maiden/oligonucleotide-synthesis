@@ -2,6 +2,8 @@
 import { useSynthesizerStore } from "@/stores/synthesizer";
 import { computed, ref, watch, type ModelRef, type Ref } from "vue";
 import NucleotideInput from "./NucleotideInput.vue";
+import PrioritySelect from "./PrioritySelect.vue";
+import type { Priority } from "@/types/types";
 
 const store = useSynthesizerStore();
 
@@ -16,11 +18,17 @@ let isEditing = ref(false);
 const sequenceData = ref(store.getSequenceByTimestamp(props.timestamp));
 const sequence = computed(() => sequenceData.value?.sequence || "");
 let newSequence: Ref<string> = ref("");
+let priority: Ref<Priority> = ref(sequenceData.value!.priority);
 
 watch(isEditing, (value) => {
   if (!value) return;
   newSequence.value = sequence.value;
 });
+watch(priority, (value) => {
+  console.log(value);
+  store.changeSequencePriority(props.timestamp, value);
+});
+
 function saveChanges() {
   isEditing.value = false;
   if (sequence.value === newSequence.value) return;
@@ -32,10 +40,12 @@ function saveChanges() {
   <li class="item" v-if="sequence">
     <template v-if="!isEditing">
       <div class="task">{{ sequence }}</div>
-      <button class="button" @click="store.deleteSequence(timestamp)">
-        Удалить
-      </button>
-      <button class="button" @click="isEditing = true">Редактировать</button>
+      <div class="buttons">
+        <button class="button" @click="store.deleteSequence(timestamp)">
+          Удалить
+        </button>
+        <button class="button" @click="isEditing = true">Редактировать</button>
+      </div>
     </template>
     <form v-else @submit.prevent="saveChanges">
       <NucleotideInput
@@ -46,11 +56,16 @@ function saveChanges() {
       <button class="button" @click="isEditing = false">Отменить</button>
       <button class="submit">Сохранить</button>
     </form>
-    <!-- + add status select -->
+    <PrioritySelect v-model="priority" />
   </li>
 </template>
 
 <style scoped>
+.item {
+  display: grid;
+  place-items: center;
+  gap: 0.2em;
+}
 .task {
   max-width: min(600px, 80vw);
   word-wrap: break-word;
