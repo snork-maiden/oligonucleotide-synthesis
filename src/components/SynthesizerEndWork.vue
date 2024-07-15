@@ -15,6 +15,12 @@ const timeString = computed(() => {
     return time < 10 ? "0" + time : "" + time;
   }
 });
+
+const endWorkTime = computed(() => {
+  let now = new Date();
+  const endTime = new Date(now.getTime() + store.totalWorkTime! * 1000);
+  return endTime.toLocaleTimeString();
+});
 </script>
 
 <template>
@@ -23,7 +29,18 @@ const timeString = computed(() => {
     <div class="description">через:</div>
     <div class="time">{{ timeString }}</div>
     <div class="description">в:</div>
+    <div class="time">{{ endWorkTime }}</div>
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3em;
+}
+
+.description {
+  font-weight: 600;
+}
+</style>
