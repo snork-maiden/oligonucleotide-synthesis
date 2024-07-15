@@ -1,18 +1,23 @@
-# oligonucleotide-synthesis
 
-This template should help get you started developing with Vue 3 in Vite.
+# Олигонуклеотидный синтезатор
 
-## Recommended IDE Setup
+SPA, эмулирующее работу синтезатора олигонуклеотидов. Синтезатор может обрабатывать задачи на синтез последовательностей нуклеотидов, которые можно создавать, редактировать и удалять. Состояние синтезатора изменяется в зависимости от текущей задачи и количества выполненных задач.
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+## Основные возможности
 
-## Type Support for `.vue` Imports in TS
+- Добавление последовательностей в очередь на синтез.
+- Индикация статуса синтезатора ("занят", "бездействует", "на обслуживании").
+- Индикация прогресса синтеза последовательности.
+- Валидация последовательностей (только символы "a", "t", "g", "c" и длина от 6 до 120) как при добавлении, так и при редактировании.
+- Возможность редактирования и удаления последовательностей, если они еще не в обработке.
+- Система таймеров, эмулирующая процесс присоединения букв к последовательности (1 буква = 1 секунда).
+- Переключение синтезатора в режим обслуживания каждые пять выполненных задач на 3 секунды.
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+## Stack
 
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+- Vue 3
+- Pinia 
+- TypeScript
 
 ## Project Setup
 
