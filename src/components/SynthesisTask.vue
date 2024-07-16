@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useSynthesizerStore } from "@/stores/synthesizer";
-import { computed, ref, watch, type ModelRef, type Ref } from "vue";
+import { computed, ref, watch, type Ref } from "vue";
 import NucleotideInput from "./NucleotideInput.vue";
 import PrioritySelect from "./PrioritySelect.vue";
 import type { Priority } from "@/types/types";
@@ -27,7 +27,6 @@ watch(isEditing, (value) => {
   newSequence.value = sequence.value;
 });
 watch(priority, (value) => {
-  console.log(value);
   store.changeSequencePriority(props.timestamp, value);
 });
 

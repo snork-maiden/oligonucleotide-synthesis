@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useSynthesizerStore } from "@/stores/synthesizer";
-import { computed, ref } from "vue";
+import { computed } from "vue";
 import SynthesizerEndWork from "./SynthesizerEndWork.vue";
 
 const store = useSynthesizerStore();

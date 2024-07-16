@@ -161,7 +161,7 @@ export const useSynthesizerStore = defineStore("synthesizer", () => {
       return item;
     });
     synthesizerWorkStake++;
-    console.log(synthesizerWorkStake);
+    
     if (synthesizerWorkStake === MAX_STAKE) {
       startService();
       return;

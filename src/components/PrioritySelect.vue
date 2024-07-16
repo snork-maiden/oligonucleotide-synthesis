@@ -1,21 +1,20 @@
 <script setup lang="ts">
 import type { Priority } from "@/types/types";
-import { onMounted, ref, watch, type ModelRef, type Ref } from "vue";
+import { type ModelRef } from "vue";
 
-let value = defineModel({ default:'medium' }) as ModelRef<Priority>;
-
+let value = defineModel({ default: "medium" }) as ModelRef<Priority>;
 </script>
 
 <template>
- <label class="select">
-  <span class="label">Приоритет:</span>
+  <label class="select">
+    <span class="label">Приоритет:</span>
 
-  <select required v-model="value">
-    <option value="low">низкий</option>
-    <option value="medium">средний</option>
-    <option value="high">высокий</option>
-  </select>
- </label>
+    <select required v-model="value">
+      <option value="low">низкий</option>
+      <option value="medium">средний</option>
+      <option value="high">высокий</option>
+    </select>
+  </label>
 </template>
 
 <style scoped>

@@ -1,18 +1,18 @@
 <script setup lang="ts">
 import { useSynthesizerStore } from "@/stores/synthesizer";
-import { ref, watch, type ModelRef, type Ref } from "vue";
+import { ref, type Ref } from "vue";
 import NucleotideInput from "./NucleotideInput.vue";
 import PrioritySelect from "./PrioritySelect.vue";
 import type { Priority } from "@/types/types";
 const store = useSynthesizerStore();
 
 let sequence: Ref<string> = ref("");
-let priority: Ref<Priority> = ref('medium');
+let priority: Ref<Priority> = ref("medium");
 
 function add() {
   store.addSequence(sequence.value, Date.now(), priority.value);
   sequence.value = "";
-  priority.value = 'medium'
+  priority.value = "medium";
 }
 </script>
 
@@ -23,7 +23,7 @@ function add() {
       <NucleotideInput v-model="sequence" @submit="add" class="input" />
     </label>
     <div class="warning">Только нуклеотиды a, t, g, c</div>
-    <PrioritySelect v-model="priority"/>
+    <PrioritySelect v-model="priority" />
     <button type="submit" class="add">Добавить</button>
   </form>
 </template>

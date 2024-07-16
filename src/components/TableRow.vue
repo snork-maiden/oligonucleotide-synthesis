@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useSynthesizerStore } from "@/stores/synthesizer";
 import { secondsLeftToString } from "@/utils/helpers";
-import { computed, ref } from "vue";
+import { computed } from "vue";
 const store = useSynthesizerStore();
 
 const props = defineProps({
