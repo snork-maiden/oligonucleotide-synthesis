@@ -13,7 +13,7 @@ export const useSynthesizerStore = defineStore("synthesizer", () => {
   });
   const sequences: Ref<Sequence[]> = ref([]);
   let synthesizerWorkStake = 0;
-  const MAX_STAKE = 5
+  const MAX_STAKE = 5;
   const SERVICE_TIME = 3;
 
   const waitingSequences = computed(() =>
@@ -38,17 +38,12 @@ export const useSynthesizerStore = defineStore("synthesizer", () => {
     (): boolean => !!waitingSequences.value.length
   );
 
-  const totalServiceTime = computed((): number => {
-    const finalStack = synthesizerWorkStake + waitingSequences.value.length;
-    if (finalStack <= MAX_STAKE) return 0;
-
-    return Math.round(finalStack / MAX_STAKE) * SERVICE_TIME;
-  });
+  const totalServiceTime = computed((): number =>
+    calculateServiceTime(waitingSequences.value.length)
+  );
 
   const secondsToProcessWaiting = computed((): number =>
-    waitingSequences.value.reduce((sum, item) => {
-      return sum + item.sequence.length;
-    }, 0)
+    waitingSequences.value.reduce((sum, item) => sum + item.sequence.length, 0)
   );
 
   const totalWorkTime = computed((): number | null => {
@@ -64,9 +59,26 @@ export const useSynthesizerStore = defineStore("synthesizer", () => {
     return synthesizer.value;
   }
 
-function getSequences() {
-  return sequences.value
-}
+  function getSequences() {
+    return sequences.value;
+  }
+
+  function getSecondsToFinish(timestamp: number): number {
+    const index = sortedWaitingSequences.value.findIndex(
+      (item) => item.timestamp === timestamp
+    );
+    if (index === -1) throw new Error("No such sequence in queue");
+    const sequences = sortedWaitingSequences.value.slice(0, index + 1);
+    const timeToProcess = sequences.reduce(
+      (sum, item) => sum + item.sequence.length,
+      0
+    );
+    return (
+      calculateServiceTime(sequences.length) +
+      timeToProcess +
+      synthesizer.value.secondsLeft!
+    );
+  }
 
   function addSequence(
     sequence: string,
@@ -196,16 +208,24 @@ function getSequences() {
     return sequences.value.find((item) => item.timestamp === timestamp) ?? null;
   }
 
+  function calculateServiceTime(sequencesLength: number): number {
+    const finalStack = synthesizerWorkStake + sequencesLength;
+    if (finalStack <= MAX_STAKE) return 0;
+
+    return Math.round(finalStack / MAX_STAKE) * SERVICE_TIME;
+  }
+
   return {
     getSynthesizer,
+    getSequenceByTimestamp,
+    getSequences,
+    getSecondsToFinish,
     addSequence,
-    changeSequencePriority,
     editSequence,
     deleteSequence,
+    changeSequencePriority,
     waitingSequences,
     isWaitingSequences,
-    getSequenceByTimestamp,
     totalWorkTime,
-    getSequences
   };
 });

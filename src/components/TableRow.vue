@@ -15,8 +15,15 @@ const sequenceData = computed(() =>
   store.getSequenceByTimestamp(props.timestamp)
 );
 const endTime = computed(() => {
-  if (sequenceData.value?.status === "progress")
+  if (sequenceData.value?.status === "progress") {
     return secondsLeftToString(store.getSynthesizer().secondsLeft!);
+  }
+  if (sequenceData.value?.status === "waiting") {
+    const seconds = store.getSecondsToFinish(props.timestamp);
+    return secondsLeftToString(seconds);
+  }
+
+  return "Готово";
 });
 </script>
 

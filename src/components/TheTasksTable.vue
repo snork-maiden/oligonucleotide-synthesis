@@ -12,7 +12,7 @@ const store = useSynthesizerStore();
       <th class="header">Статус</th>
       <th class="header">Приоритет</th>
       <th class="header">Создание задачи (timestamp)</th>
-      <th class="header">Время завершения</th>
+      <th class="header">Завершится&nbsp;в:</th>
     </tr>
     <TableRow
       v-for="item of store.getSequences()"
@@ -20,7 +20,7 @@ const store = useSynthesizerStore();
       :timestamp="item.timestamp"
     />
   </table>
-  <div class="warning">
+  <div class="warning" v-else>
     Перейдите на <RouterLink class="link" to="/">главную</RouterLink>, чтобы
     добавить последовательности
   </div>
@@ -40,8 +40,9 @@ const store = useSynthesizerStore();
   text-decoration: none;
 }
 
-.header {
+.header, .table td {
   text-align: center;
+  padding: 0.2em 0.4em;
 }
 
 .table tr {
