@@ -13,6 +13,7 @@ export const useSynthesizerStore = defineStore("synthesizer", () => {
   });
   const sequences: Ref<Sequence[]> = ref([]);
   let synthesizerWorkStake = 0;
+  const MAX_STAKE = 5
   const SERVICE_TIME = 3;
 
   const waitingSequences = computed(() =>
@@ -39,9 +40,9 @@ export const useSynthesizerStore = defineStore("synthesizer", () => {
 
   const totalServiceTime = computed((): number => {
     const finalStack = synthesizerWorkStake + waitingSequences.value.length;
-    if (finalStack <= 5) return 0;
+    if (finalStack <= MAX_STAKE) return 0;
 
-    return Math.round(finalStack / 5) * SERVICE_TIME;
+    return Math.round(finalStack / MAX_STAKE) * SERVICE_TIME;
   });
 
   const secondsToProcessWaiting = computed((): number =>
@@ -62,6 +63,10 @@ export const useSynthesizerStore = defineStore("synthesizer", () => {
   function getSynthesizer() {
     return synthesizer.value;
   }
+
+function getSequences() {
+  return sequences.value
+}
 
   function addSequence(
     sequence: string,
@@ -145,7 +150,7 @@ export const useSynthesizerStore = defineStore("synthesizer", () => {
     });
     synthesizerWorkStake++;
     console.log(synthesizerWorkStake);
-    if (synthesizerWorkStake === 5) {
+    if (synthesizerWorkStake === MAX_STAKE) {
       startService();
       return;
     }
@@ -201,5 +206,6 @@ export const useSynthesizerStore = defineStore("synthesizer", () => {
     isWaitingSequences,
     getSequenceByTimestamp,
     totalWorkTime,
+    getSequences
   };
 });

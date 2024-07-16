@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useSynthesizerStore } from "@/stores/synthesizer";
+import { secondsLeftToString } from "@/utils/helpers";
 import { computed } from "vue";
 
 const store = useSynthesizerStore();
@@ -16,11 +17,7 @@ const timeString = computed(() => {
   }
 });
 
-const endWorkTime = computed(() => {
-  let now = new Date();
-  const endTime = new Date(now.getTime() + store.totalWorkTime! * 1000);
-  return endTime.toLocaleTimeString();
-});
+const endWorkTime = computed(() => secondsLeftToString(store.totalWorkTime!));
 </script>
 
 <template>

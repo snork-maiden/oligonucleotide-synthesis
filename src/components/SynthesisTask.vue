@@ -15,7 +15,9 @@ const props = defineProps({
 });
 
 let isEditing = ref(false);
-const sequenceData = ref(store.getSequenceByTimestamp(props.timestamp));
+const sequenceData = computed(() =>
+  store.getSequenceByTimestamp(props.timestamp)
+);
 const sequence = computed(() => sequenceData.value?.sequence || "");
 let newSequence: Ref<string> = ref("");
 let priority: Ref<Priority> = ref(sequenceData.value!.priority);
@@ -63,8 +65,7 @@ function saveChanges() {
 <style scoped>
 .item {
   display: grid;
-  place-items: center;
-  gap: 0.2em;
+  gap: 0.3em;
 }
 .task {
   max-width: min(600px, 80vw);
