@@ -19,7 +19,7 @@ let isEditing: Ref<boolean> = ref(false);
 const sequenceData = computed(() =>
   store.getSequenceByTimestamp(props.timestamp)
 );
-const sequence = computed(() => sequenceData.value?.sequence || '');
+const sequence = computed(() => sequenceData.value?.sequence || "");
 
 let newSequence: Ref<string> = ref("");
 let priority: Ref<Priority> = ref(sequenceData.value!.priority);
@@ -56,8 +56,11 @@ function saveChanges() {
         class="task"
         @submit="saveChanges"
       />
-      <button class="button" @click="isEditing = false">Отменить</button>
-      <button class="submit">Сохранить</button>
+
+      <div class="buttons">
+        <button class="button" @click="isEditing = false">Отменить</button>
+        <button class="submit">Сохранить</button>
+      </div>
     </form>
     <PrioritySelect v-model="priority" />
   </li>
@@ -71,5 +74,11 @@ function saveChanges() {
 .task {
   max-width: min(600px, 80vw);
   word-wrap: break-word;
+}
+
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3em;
 }
 </style>
