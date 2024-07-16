@@ -67,4 +67,12 @@ function translatePriority(priority: Priority) {
   max-width: min(400px, 30vw);
   word-wrap: break-word;
 }
+
+.row {
+  background-color: var(--table-bg-color);
+}
+
+.row:nth-child(2n + 1) {
+  background-color: var(--table-bg-color-2);
+}
 </style>

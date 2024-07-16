@@ -14,11 +14,13 @@ const props = defineProps({
   },
 });
 
-let isEditing = ref(false);
+let isEditing: Ref<boolean> = ref(false);
+
 const sequenceData = computed(() =>
   store.getSequenceByTimestamp(props.timestamp)
 );
-const sequence = computed(() => sequenceData.value?.sequence || "");
+const sequence = computed(() => sequenceData.value?.sequence || '');
+
 let newSequence: Ref<string> = ref("");
 let priority: Ref<Priority> = ref(sequenceData.value!.priority);
 

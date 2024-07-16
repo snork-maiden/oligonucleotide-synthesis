@@ -1,7 +1,10 @@
 :root {
   --color-text: black;
   --color-background: hsl(45, 14%, 98%);
-  --header-height: 3em
+  --header-height: 3em;
+  --table-bg-color: #eef4f7;
+  --table-bg-color-2: white;
+  --synthesizer-bg-color: rgb(202, 207, 204);
 }
 *,
 *::before,
@@ -11,33 +14,27 @@
   font-weight: normal;
 }
 
-button, textarea, select {
-  font: inherit
+button,
+textarea,
+select {
+  font: inherit;
 }
 
 body {
   min-height: 100vh;
   color: var(--color-text);
   background: var(--color-background);
-  transition:
-    color 0.5s,
-    background-color 0.5s;
+  transition: color 0.5s, background-color 0.5s;
   line-height: 1.6;
-  font-family:
-    Inter,
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    Roboto,
-    Oxygen,
-    Ubuntu,
-    Cantarell,
-    'Fira Sans',
-    'Droid Sans',
-    'Helvetica Neue',
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   font-size: 18px;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+button {
+  cursor: pointer;
 }

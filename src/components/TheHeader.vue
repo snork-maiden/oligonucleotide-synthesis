@@ -45,8 +45,8 @@ import { RouterLink } from "vue-router";
   border-bottom: 1px solid;
 }
 
-.link:active,.link:hover {
+.link:active,
+.link:hover {
   transform: scale(1.02);
 }
-
 </style>

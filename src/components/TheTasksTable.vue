@@ -1,25 +1,31 @@
 <script setup lang="ts">
 import { useSynthesizerStore } from "@/stores/synthesizer";
 import TableRow from "./TableRow.vue";
+import { computed } from "vue";
 
 const store = useSynthesizerStore();
+const isSequences = computed(() => store.getSequences().length);
 </script>
 
 <template>
-  <div class="wrapper" v-if="store.getSequences().length">
+  <div class="wrapper" v-if="isSequences">
     <table class="table">
-      <tr class="row">
-        <th class="header"></th>
-        <th class="header">Статус</th>
-        <th class="header">Приоритет</th>
-        <th class="header">Создание задачи (timestamp)</th>
-        <th class="header">Завершится&nbsp;в:</th>
-      </tr>
-      <TableRow
-        v-for="item of store.getSequences()"
-        :key="item.timestamp"
-        :timestamp="item.timestamp"
-      />
+      <thead>
+        <tr class="row">
+          <th class="header"></th>
+          <th class="header">Статус</th>
+          <th class="header">Приоритет</th>
+          <th class="header">Создание задачи (timestamp)</th>
+          <th class="header">Завершится&nbsp;в:</th>
+        </tr>
+      </thead>
+      <tbody>
+        <TableRow
+          v-for="item of store.getSequences()"
+          :key="item.timestamp"
+          :timestamp="item.timestamp"
+        />
+      </tbody>
     </table>
   </div>
   <div class="warning" v-else>
@@ -29,10 +35,9 @@ const store = useSynthesizerStore();
 </template>
 
 <style scoped>
-
 .wrapper {
   max-width: 95vw;
-  overflow-x: auto
+  overflow-x: auto;
 }
 
 .table {
@@ -40,6 +45,7 @@ const store = useSynthesizerStore();
 }
 .header {
   font-weight: 600;
+  background-color: var(--table-bg-color);
 }
 
 .link {
@@ -52,13 +58,5 @@ const store = useSynthesizerStore();
 .table td {
   text-align: center;
   padding: 0.6em;
-}
-
-.table tr {
-  background-color: white;
-}
-
-.table tr:nth-child(2n + 1) {
-  background-color: #eef4f7;
 }
 </style>

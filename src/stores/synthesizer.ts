@@ -20,7 +20,7 @@ export const useSynthesizerStore = defineStore("synthesizer", () => {
     sequences.value.filter((item) => item.status === "waiting")
   );
 
-  const sortedWaitingSequences = computed(() => {
+  const sortedWaitingSequences = computed((): Sequence[] => {
     const highPriority = waitingSequences.value.filter(
       (item) => item.priority === "high"
     );
@@ -84,7 +84,7 @@ export const useSynthesizerStore = defineStore("synthesizer", () => {
     sequence: string,
     timestamp: number,
     priority: Priority = "medium"
-  ) {
+  ): void {
     sequences.value.push({
       sequence,
       status: "waiting",
@@ -111,7 +111,7 @@ export const useSynthesizerStore = defineStore("synthesizer", () => {
     sequence.sequence = newSequence;
   }
 
-  function deleteSequence(timestamp: number) {
+  function deleteSequence(timestamp: number): void {
     const index = sequences.value.findIndex(
       (item) => item.timestamp === timestamp
     );
@@ -120,7 +120,7 @@ export const useSynthesizerStore = defineStore("synthesizer", () => {
     }
   }
 
-  function takeNextSequence() {
+  function takeNextSequence(): void {
     const sequence = sortedWaitingSequences.value[0];
     if (!sequence) return;
     sequence.status = "progress";
@@ -134,7 +134,7 @@ export const useSynthesizerStore = defineStore("synthesizer", () => {
     processSequence();
   }
 
-  function processSequence() {
+  function processSequence(): void {
     const seconds = synthesizer.value.secondsLeft;
     if (seconds === null) {
       throw new Error("Seconds not provided");
@@ -153,7 +153,7 @@ export const useSynthesizerStore = defineStore("synthesizer", () => {
     );
   }
 
-  function stopTimer() {
+  function stopTimer(): void {
     sequences.value = sequences.value.map((item) => {
       if (item.status === "progress") {
         return { ...item, status: "complete" };
@@ -161,7 +161,7 @@ export const useSynthesizerStore = defineStore("synthesizer", () => {
       return item;
     });
     synthesizerWorkStake++;
-    
+
     if (synthesizerWorkStake === MAX_STAKE) {
       startService();
       return;
@@ -170,7 +170,7 @@ export const useSynthesizerStore = defineStore("synthesizer", () => {
     workWithQueue();
   }
 
-  function workWithQueue() {
+  function workWithQueue(): void {
     if (!isWaitingSequences.value) {
       synthesizer.value = {
         sequence: null,
@@ -184,7 +184,7 @@ export const useSynthesizerStore = defineStore("synthesizer", () => {
     takeNextSequence();
   }
 
-  function startService() {
+  function startService(): void {
     synthesizerWorkStake = 0;
 
     synthesizer.value = {

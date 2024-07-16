@@ -10,7 +10,6 @@ import TheTasksTable from "./TheTasksTable.vue";
 
 <style scoped>
 .wrapper {
- margin: auto;
+  margin: auto;
 }
-
 </style>

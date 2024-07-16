@@ -7,7 +7,6 @@ export interface Sequence {
   priority: Priority;
 }
 
-
 export interface Synthesizer {
   sequence: string | null;
   status: Status;

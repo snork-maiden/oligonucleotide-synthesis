@@ -49,7 +49,7 @@ const statusTranslate = computed(() => {
 <style scoped>
 .synthesizer {
   padding: 2em;
-  background-color: rgb(202, 207, 204);
+  background-color: var(--synthesizer-bg-color);
   width: 100%;
   max-width: 1000px;
   display: grid;
@@ -76,7 +76,7 @@ const statusTranslate = computed(() => {
   align-items: start;
   flex-wrap: wrap;
   gap: 0.1em;
-  color: grey;
+  color: #808080;
 }
 
 .letter {

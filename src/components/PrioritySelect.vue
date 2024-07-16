@@ -9,7 +9,7 @@ let value = defineModel({ default: "medium" }) as ModelRef<Priority>;
   <label class="select">
     <span class="label">Приоритет:</span>
 
-    <select required v-model="value">
+    <select v-model="value" required>
       <option value="low">низкий</option>
       <option value="medium">средний</option>
       <option value="high">высокий</option>
