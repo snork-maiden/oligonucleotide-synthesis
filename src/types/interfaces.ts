@@ -1,4 +1,4 @@
-import type { Priority, Status } from "./types";
+import type { Priority, Status, TaskStatus } from "./types";
 
 export interface Sequence {
   sequence: string;
@@ -7,7 +7,6 @@ export interface Sequence {
   priority: Priority;
 }
 
-type TaskStatus = "waiting" | "progress" | "complete";
 
 export interface Synthesizer {
   sequence: string | null;

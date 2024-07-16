@@ -3,5 +3,14 @@ import TheTasksTable from "./TheTasksTable.vue";
 </script>
 
 <template>
-  <TheTasksTable />
+  <div class="wrapper">
+    <TheTasksTable />
+  </div>
 </template>
+
+<style scoped>
+.wrapper {
+ margin: auto;
+}
+
+</style>

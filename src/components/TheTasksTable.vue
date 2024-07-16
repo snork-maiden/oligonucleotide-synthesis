@@ -6,20 +6,22 @@ const store = useSynthesizerStore();
 </script>
 
 <template>
-  <table class="table" v-if="store.getSequences().length">
-    <tr class="row">
-      <th class="header"></th>
-      <th class="header">Статус</th>
-      <th class="header">Приоритет</th>
-      <th class="header">Создание задачи (timestamp)</th>
-      <th class="header">Завершится&nbsp;в:</th>
-    </tr>
-    <TableRow
-      v-for="item of store.getSequences()"
-      :key="item.timestamp"
-      :timestamp="item.timestamp"
-    />
-  </table>
+  <div class="wrapper" v-if="store.getSequences().length">
+    <table class="table">
+      <tr class="row">
+        <th class="header"></th>
+        <th class="header">Статус</th>
+        <th class="header">Приоритет</th>
+        <th class="header">Создание задачи (timestamp)</th>
+        <th class="header">Завершится&nbsp;в:</th>
+      </tr>
+      <TableRow
+        v-for="item of store.getSequences()"
+        :key="item.timestamp"
+        :timestamp="item.timestamp"
+      />
+    </table>
+  </div>
   <div class="warning" v-else>
     Перейдите на <RouterLink class="link" to="/">главную</RouterLink>, чтобы
     добавить последовательности
@@ -27,6 +29,12 @@ const store = useSynthesizerStore();
 </template>
 
 <style scoped>
+
+.wrapper {
+  max-width: 95vw;
+  overflow-x: auto
+}
+
 .table {
   margin-top: 2em;
 }
@@ -40,9 +48,10 @@ const store = useSynthesizerStore();
   text-decoration: none;
 }
 
-.header, .table td {
+.header,
+.table td {
   text-align: center;
-  padding: 0.2em 0.4em;
+  padding: 0.6em;
 }
 
 .table tr {
