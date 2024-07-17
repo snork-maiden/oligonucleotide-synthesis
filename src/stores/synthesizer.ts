@@ -4,6 +4,7 @@ import type { Sequence, Synthesizer } from "@/types/interfaces";
 import { createTimer } from "@/utils/timer";
 import type { Filter, FilterObject, Priority } from "@/types/types";
 import { secondsLeftToString } from "@/utils/helpers";
+import { priorityTranslations, statusTranslations } from "@/utils/translations";
 
 export const useSynthesizerStore = defineStore("synthesizer", () => {
   const synthesizer: Ref<Synthesizer> = ref({
@@ -49,11 +50,21 @@ export const useSynthesizerStore = defineStore("synthesizer", () => {
     if (!filtersParams.length) return filteredSequences;
 
     filtersParams.forEach(([key, value]) => {
+      const regex = new RegExp(value!, "i");
+
       filteredSequences = filteredSequences.filter((item) => {
-        const parameterString = item[key as Filter]?.toString();
-        return parameterString?.startsWith(value!);
+        let parameterString = item[key as Filter]!.toString();
+
+        if (key === "status") {
+          parameterString = statusTranslations[item.status];
+        } else if (key === "priority") {
+          parameterString = priorityTranslations[item.priority];
+        }
+
+        return parameterString && regex.test(parameterString);
       });
     });
+
     return filteredSequences;
   });
 
@@ -79,7 +90,7 @@ export const useSynthesizerStore = defineStore("synthesizer", () => {
   }
 
   function getSequences() {
-    return sequences.value
+    return sequences.value;
   }
 
   function getFilters() {

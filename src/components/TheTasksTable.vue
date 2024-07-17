@@ -7,7 +7,6 @@ const store = useSynthesizerStore();
 
 <template>
   <div class="wrapper">
-    {{ new Date().toLocaleTimeString() }}
     <table class="table">
       <thead>
         <tr class="row">

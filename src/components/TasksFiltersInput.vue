@@ -2,7 +2,7 @@
 import { useSynthesizerStore } from "@/stores/synthesizer";
 import type { Filter } from "@/types/types";
 import { FilterFieldTranslations } from "@/utils/translations";
-import { computed, ref, watch, type ModelRef } from "vue";
+import { ref, watch, type ModelRef } from "vue";
 
 const store = useSynthesizerStore();
 
@@ -14,45 +14,59 @@ let value: ModelRef<string | undefined, string> = defineModel();
 watch(value, (newValue) => {
   if (newValue) {
     store.setFilter(props.filter, newValue);
+    return
   }
+  store.setFilter(props.filter);
 });
 </script>
 
 <template>
-  <label class="input">
-    <span class="label">{{ FilterFieldTranslations[filter] + ":" }}</span>
-    <input type="text" v-model="value" />
-  </label>
-  <button type="button" @click="store.deleteFilter(filter)" class="delete">
-    <!--Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools-->
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="20"
-      height="20"
-      fill="none"
-      viewBox="0 0 24 24"
+  <div class="filter-input">
+    <label :for="`filter-${filter}`" class="label"
+      >{{ FilterFieldTranslations[filter] }}:</label
     >
-      <title>Удалить</title>
-      <path fill="#fff" d="M0 0h24v24H0z" />
-      <path
-        stroke="#000"
+    <input :id="`filter-${filter}`" type="text" v-model="value" class="input" />
+    <button type="button" @click="store.deleteFilter(filter)" class="delete">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
         stroke-linecap="round"
         stroke-linejoin="round"
-        d="M7 17 17 7M7 7l10 10"
-      />
-    </svg>
-  </button>
+        class="close-icon"
+      >
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+  </div>
 </template>
 
 <style scoped>
-.input {
-  display: inline-flex;
-  flex-direction: column;
+.filter-input {
+  display: flex;
   align-items: center;
 }
 
+.input {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 8em;
+}
+
+.label {
+  margin-right: 0.5em;
+}
+
 .delete {
-background: none;
-border: 0;
+  display: grid;
+  place-items: center;
+  background: none;
+  border: 0;
+  margin-left: -0.2em;
 }
 </style>

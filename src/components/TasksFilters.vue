@@ -27,9 +27,16 @@ const filters = computed(() => store.getFilters());
 .wrapper {
   display: flex;
   align-items: flex-start;
+  gap: 2em;
 }
 
 .select {
   margin-left: auto;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1em ;
 }
 </style>
