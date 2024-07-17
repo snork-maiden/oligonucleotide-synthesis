@@ -78,6 +78,15 @@ export const useSynthesizerStore = defineStore("synthesizer", () => {
     return synthesizer.value;
   }
 
+  function getSequences() {
+    return sequences.value
+  }
+
+  function getFilters() {
+    if (!Object.keys(filters.value).length) return null;
+    return filters.value;
+  }
+
   function addSequence(
     sequence: string,
     timestamp: number,
@@ -118,7 +127,7 @@ export const useSynthesizerStore = defineStore("synthesizer", () => {
     }
   }
 
-  function setFilter(filterName: Filter, value = null) {
+  function setFilter(filterName: Filter, value: string | null = null) {
     filters.value[filterName] = value;
   }
 
@@ -249,6 +258,8 @@ export const useSynthesizerStore = defineStore("synthesizer", () => {
   return {
     getSynthesizer,
     getSequenceByTimestamp,
+    getFilters,
+    getSequences,
     addSequence,
     editSequence,
     deleteSequence,
@@ -257,5 +268,7 @@ export const useSynthesizerStore = defineStore("synthesizer", () => {
     isWaitingSequences,
     totalWorkTime,
     filteredSequences,
+    setFilter,
+    deleteFilter,
   };
 });

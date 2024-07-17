@@ -6,3 +6,4 @@ export type Filter = "priority" | "status" | "timestamp" | "endWorkTimeString";
 export type FilterObject = {
     [key in Filter]?: string | null;
   };
+

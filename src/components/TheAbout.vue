@@ -2,13 +2,15 @@
 import { useSynthesizerStore } from "@/stores/synthesizer";
 import TheTasksTable from "./TheTasksTable.vue";
 import { computed } from "vue";
+import TasksFilters from "./TasksFilters.vue";
 const store = useSynthesizerStore();
-const isSequences = computed(() => store.filteredSequences.length);
+const isSequences = computed(() => store.getSequences().length);
 </script>
 
 <template>
   <div class="wrapper">
     <template v-if="isSequences">
+      <TasksFilters/>
       <TheTasksTable />
     </template>
     <div class="warning" v-else>

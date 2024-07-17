@@ -19,13 +19,19 @@ const store = useSynthesizerStore();
         </tr>
       </thead>
       <tbody>
-        <TableRow
-          v-for="item of store.filteredSequences"
-          :key="item.timestamp"
-          :timestamp="item.timestamp"
-        />
+        <template v-if="store.filteredSequences.length">
+          <TableRow
+            v-for="item of store.filteredSequences"
+            :key="item.timestamp"
+            :timestamp="item.timestamp"
+          />
+        </template>
       </tbody>
     </table>
+
+    <div class="warning" v-if="!store.filteredSequences.length">
+      Ничего не найдено
+    </div>
   </div>
 </template>
 
@@ -47,5 +53,9 @@ const store = useSynthesizerStore();
 .table td {
   text-align: center;
   padding: 0.6em;
+}
+
+.warning {
+  padding: 2em;
 }
 </style>

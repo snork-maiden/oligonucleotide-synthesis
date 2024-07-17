@@ -16,7 +16,8 @@
 
 button,
 textarea,
-select {
+select,
+input {
   font: inherit;
 }
 
