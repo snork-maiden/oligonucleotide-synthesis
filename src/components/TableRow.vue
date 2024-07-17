@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import { useSynthesizerStore } from "@/stores/synthesizer";
-import type { Priority, TaskStatus } from "@/types/types";
 import { priorityTranslations, statusTranslations } from "@/utils/translations";
-// import { secondsLeftToString } from "@/utils/helpers";
 import { computed } from "vue";
 const store = useSynthesizerStore();
 

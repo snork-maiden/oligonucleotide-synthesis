@@ -2,7 +2,7 @@
 import { useSynthesizerStore } from "@/stores/synthesizer";
 import type { Filter } from "@/types/types";
 import { FilterFieldTranslations } from "@/utils/translations";
-import { ref, watch, type ModelRef } from "vue";
+import {watch, type ModelRef } from "vue";
 
 const store = useSynthesizerStore();
 

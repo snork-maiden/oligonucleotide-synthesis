@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { useSynthesizerStore } from "@/stores/synthesizer";
 import type { Filter } from "@/types/types";
-// import { FilterFieldTranslations } from "@/utils/translations";
-import { computed, ref, watch, type ModelRef } from "vue";
+import { computed } from "vue";
 import TasksFiltersSelect from "./TasksFiltersSelect.vue";
 import TasksFiltersInput from "./TasksFiltersInput.vue";
 

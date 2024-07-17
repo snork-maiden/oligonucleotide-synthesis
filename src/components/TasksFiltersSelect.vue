@@ -3,7 +3,7 @@ import { useSynthesizerStore } from "@/stores/synthesizer";
 import type { Filter } from "@/types/types";
 import { FilterFieldTranslations } from "@/utils/translations";
 import { nextTick } from "vue";
-import { computed, watch, type ModelRef } from "vue";
+import { computed, watch} from "vue";
 
 const store = useSynthesizerStore();
 
