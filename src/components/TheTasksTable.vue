@@ -1,14 +1,13 @@
 <script setup lang="ts">
 import { useSynthesizerStore } from "@/stores/synthesizer";
 import TableRow from "./TableRow.vue";
-import { computed } from "vue";
 
 const store = useSynthesizerStore();
 </script>
 
 <template>
   <div class="wrapper">
-    {{ (new Date).toLocaleTimeString() }}
+    {{ new Date().toLocaleTimeString() }}
     <table class="table">
       <thead>
         <tr class="row">
@@ -16,12 +15,12 @@ const store = useSynthesizerStore();
           <th class="header">Статус</th>
           <th class="header">Приоритет</th>
           <th class="header">Создание задачи (timestamp)</th>
-          <th class="header">Завершится&nbsp;в:</th>
+          <th class="header">Время завершения</th>
         </tr>
       </thead>
       <tbody>
         <TableRow
-          v-for="item of store.getSequences()"
+          v-for="item of store.filteredSequences"
           :key="item.timestamp"
           :timestamp="item.timestamp"
         />

@@ -3,7 +3,7 @@ import { useSynthesizerStore } from "@/stores/synthesizer";
 import TheTasksTable from "./TheTasksTable.vue";
 import { computed } from "vue";
 const store = useSynthesizerStore();
-const isSequences = computed(() => store.getSequences().length);
+const isSequences = computed(() => store.filteredSequences.length);
 </script>
 
 <template>

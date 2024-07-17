@@ -2,7 +2,7 @@ import { ref, computed, type Ref, watch } from "vue";
 import { defineStore } from "pinia";
 import type { Sequence, Synthesizer } from "@/types/interfaces";
 import { createTimer } from "@/utils/timer";
-import type { Priority } from "@/types/types";
+import type { Filter, FilterObject, Priority } from "@/types/types";
 import { secondsLeftToString } from "@/utils/helpers";
 
 export const useSynthesizerStore = defineStore("synthesizer", () => {
@@ -13,6 +13,7 @@ export const useSynthesizerStore = defineStore("synthesizer", () => {
     secondsLeft: null,
   });
   const sequences: Ref<Sequence[]> = ref([]);
+  const filters: Ref<FilterObject> = ref({});
   let synthesizerWorkStake = 0;
   const MAX_STAKE = 5;
   const SERVICE_TIME = 3;
@@ -35,16 +36,26 @@ export const useSynthesizerStore = defineStore("synthesizer", () => {
     return [...highPriority, ...mediumPriority, ...lowPriority];
   });
 
-  watch(sortedWaitingSequences, (sequences) => {
-    sequences.forEach(
-      (item) =>
-        (item.endWorkTimeString = calculateEndWorkTimeString(item.timestamp))
-    );
-  });
-
   const isWaitingSequences = computed(
     (): boolean => !!waitingSequences.value.length
   );
+
+  const filteredSequences = computed((): Sequence[] => {
+    const filtersParams = Object.entries(filters.value).filter(
+      ([, value]) => value !== null
+    );
+
+    let filteredSequences = sequences.value;
+    if (!filtersParams.length) return filteredSequences;
+
+    filtersParams.forEach(([key, value]) => {
+      filteredSequences = filteredSequences.filter((item) => {
+        const parameterString = item[key as Filter]?.toString();
+        return parameterString?.startsWith(value!);
+      });
+    });
+    return filteredSequences;
+  });
 
   const totalServiceTime = computed((): number =>
     calculateServiceTime(waitingSequences.value.length)
@@ -65,27 +76,6 @@ export const useSynthesizerStore = defineStore("synthesizer", () => {
 
   function getSynthesizer() {
     return synthesizer.value;
-  }
-
-  function getSequences() {
-    return sequences.value;
-  }
-
-  function calculateEndWorkTimeString(timestamp: number): string {
-    const index = sortedWaitingSequences.value.findIndex(
-      (item) => item.timestamp === timestamp
-    );
-    if (index === -1) throw new Error("No such sequence in queue");
-    const sequences = sortedWaitingSequences.value.slice(0, index + 1);
-    const timeToProcess = sequences.reduce(
-      (sum, item) => sum + item.sequence.length,
-      0
-    );
-    const seconds =
-      calculateServiceTime(sequences.length) +
-      timeToProcess +
-      synthesizer.value.secondsLeft!;
-    return secondsLeftToString(seconds);
   }
 
   function addSequence(
@@ -126,6 +116,14 @@ export const useSynthesizerStore = defineStore("synthesizer", () => {
     if (index !== -1) {
       sequences.value.splice(index, 1);
     }
+  }
+
+  function setFilter(filterName: Filter, value = null) {
+    filters.value[filterName] = value;
+  }
+
+  function deleteFilter(filterName: Filter) {
+    delete filters.value[filterName];
   }
 
   function takeNextSequence(): void {
@@ -224,10 +222,33 @@ export const useSynthesizerStore = defineStore("synthesizer", () => {
     return Math.round(finalStack / MAX_STAKE) * SERVICE_TIME;
   }
 
+  watch(sortedWaitingSequences, (sequences) => {
+    sequences.forEach(
+      (item) =>
+        (item.endWorkTimeString = calculateEndWorkTimeString(item.timestamp))
+    );
+  });
+
+  function calculateEndWorkTimeString(timestamp: number): string {
+    const index = sortedWaitingSequences.value.findIndex(
+      (item) => item.timestamp === timestamp
+    );
+    if (index === -1) throw new Error("No such sequence in queue");
+    const sequences = sortedWaitingSequences.value.slice(0, index + 1);
+    const timeToProcess = sequences.reduce(
+      (sum, item) => sum + item.sequence.length,
+      0
+    );
+    const seconds =
+      calculateServiceTime(sequences.length) +
+      timeToProcess +
+      synthesizer.value.secondsLeft!;
+    return secondsLeftToString(seconds);
+  }
+
   return {
     getSynthesizer,
     getSequenceByTimestamp,
-    getSequences,
     addSequence,
     editSequence,
     deleteSequence,
@@ -235,5 +256,6 @@ export const useSynthesizerStore = defineStore("synthesizer", () => {
     waitingSequences,
     isWaitingSequences,
     totalWorkTime,
+    filteredSequences,
   };
 });
