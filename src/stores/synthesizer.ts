@@ -1,8 +1,9 @@
-import { ref, computed, type Ref } from "vue";
+import { ref, computed, type Ref, watch } from "vue";
 import { defineStore } from "pinia";
 import type { Sequence, Synthesizer } from "@/types/interfaces";
 import { createTimer } from "@/utils/timer";
 import type { Priority } from "@/types/types";
+import { secondsLeftToString } from "@/utils/helpers";
 
 export const useSynthesizerStore = defineStore("synthesizer", () => {
   const synthesizer: Ref<Synthesizer> = ref({
@@ -34,6 +35,13 @@ export const useSynthesizerStore = defineStore("synthesizer", () => {
     return [...highPriority, ...mediumPriority, ...lowPriority];
   });
 
+  watch(sortedWaitingSequences, (sequences) => {
+    sequences.forEach(
+      (item) =>
+        (item.endWorkTimeString = calculateEndWorkTimeString(item.timestamp))
+    );
+  });
+
   const isWaitingSequences = computed(
     (): boolean => !!waitingSequences.value.length
   );
@@ -63,7 +71,7 @@ export const useSynthesizerStore = defineStore("synthesizer", () => {
     return sequences.value;
   }
 
-  function getSecondsToFinish(timestamp: number): number {
+  function calculateEndWorkTimeString(timestamp: number): string {
     const index = sortedWaitingSequences.value.findIndex(
       (item) => item.timestamp === timestamp
     );
@@ -73,11 +81,11 @@ export const useSynthesizerStore = defineStore("synthesizer", () => {
       (sum, item) => sum + item.sequence.length,
       0
     );
-    return (
+    const seconds =
       calculateServiceTime(sequences.length) +
       timeToProcess +
-      synthesizer.value.secondsLeft!
-    );
+      synthesizer.value.secondsLeft!;
+    return secondsLeftToString(seconds);
   }
 
   function addSequence(
@@ -123,13 +131,14 @@ export const useSynthesizerStore = defineStore("synthesizer", () => {
   function takeNextSequence(): void {
     const sequence = sortedWaitingSequences.value[0];
     if (!sequence) return;
+    const seconds = sequence.sequence.length;
     sequence.status = "progress";
-
+    sequence.endWorkTimeString = secondsLeftToString(seconds);
     synthesizer.value = {
       sequence: sequence.sequence,
       currentLetterIndex: 0,
       status: "busy",
-      secondsLeft: sequence.sequence.length,
+      secondsLeft: seconds,
     };
     processSequence();
   }
@@ -219,7 +228,6 @@ export const useSynthesizerStore = defineStore("synthesizer", () => {
     getSynthesizer,
     getSequenceByTimestamp,
     getSequences,
-    getSecondsToFinish,
     addSequence,
     editSequence,
     deleteSequence,

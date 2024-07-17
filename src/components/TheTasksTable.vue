@@ -4,11 +4,11 @@ import TableRow from "./TableRow.vue";
 import { computed } from "vue";
 
 const store = useSynthesizerStore();
-const isSequences = computed(() => store.getSequences().length);
 </script>
 
 <template>
-  <div class="wrapper" v-if="isSequences">
+  <div class="wrapper">
+    {{ (new Date).toLocaleTimeString() }}
     <table class="table">
       <thead>
         <tr class="row">
@@ -28,10 +28,6 @@ const isSequences = computed(() => store.getSequences().length);
       </tbody>
     </table>
   </div>
-  <div class="warning" v-else>
-    Перейдите на <RouterLink class="link" to="/">главную</RouterLink>, чтобы
-    добавить последовательности
-  </div>
 </template>
 
 <style scoped>
@@ -46,12 +42,6 @@ const isSequences = computed(() => store.getSequences().length);
 .header {
   font-weight: 600;
   background-color: var(--table-bg-color);
-}
-
-.link {
-  color: inherit;
-  font-weight: 500;
-  text-decoration: none;
 }
 
 .header,

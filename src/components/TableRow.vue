@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useSynthesizerStore } from "@/stores/synthesizer";
 import type { Priority, TaskStatus } from "@/types/types";
-import { secondsLeftToString } from "@/utils/helpers";
+// import { secondsLeftToString } from "@/utils/helpers";
 import { computed } from "vue";
 const store = useSynthesizerStore();
 
@@ -15,17 +15,6 @@ const props = defineProps({
 const sequenceData = computed(() =>
   store.getSequenceByTimestamp(props.timestamp)
 );
-const endTime = computed(() => {
-  if (sequenceData.value?.status === "progress") {
-    return secondsLeftToString(store.getSynthesizer().secondsLeft!);
-  }
-  if (sequenceData.value?.status === "waiting") {
-    const seconds = store.getSecondsToFinish(props.timestamp);
-    return secondsLeftToString(seconds);
-  }
-
-  return "Готово";
-});
 
 const translatedStatus = computed(() =>
   translateStatus(sequenceData.value!.status)
@@ -53,7 +42,7 @@ function translatePriority(priority: Priority) {
     <td class="data">{{ translatedStatus }}</td>
     <td class="data">{{ translatedPriority }}</td>
     <td class="data">{{ sequenceData.timestamp }}</td>
-    <td class="data">{{ endTime }}</td>
+    <td class="data">{{ sequenceData.endWorkTimeString }}</td>
   </tr>
 </template>
 

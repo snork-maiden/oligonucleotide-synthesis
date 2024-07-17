@@ -5,6 +5,7 @@ export interface Sequence {
   status: TaskStatus;
   timestamp: number;
   priority: Priority;
+  endWorkTimeString?: string;
 }
 
 export interface Synthesizer {
