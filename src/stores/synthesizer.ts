@@ -146,6 +146,10 @@ export const useSynthesizerStore = defineStore("synthesizer", () => {
     delete filters.value[filterName];
   }
 
+  function clearFilters() {
+    filters.value = {}
+  }
+
   function takeNextSequence(): void {
     const sequence = sortedWaitingSequences.value[0];
     if (!sequence) return;
@@ -281,5 +285,6 @@ export const useSynthesizerStore = defineStore("synthesizer", () => {
     filteredSequences,
     setFilter,
     deleteFilter,
+    clearFilters
   };
 });

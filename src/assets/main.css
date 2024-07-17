@@ -19,6 +19,8 @@ textarea,
 select,
 input {
   font: inherit;
+  border: 1px solid #b1b4b2;
+  border-radius: 4px;
 }
 
 body {

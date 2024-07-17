@@ -53,8 +53,6 @@ watch(value, (newValue) => {
 }
 
 .input {
-  border: 1px solid #ccc;
-  border-radius: 4px;
   width: 8em;
 }
 

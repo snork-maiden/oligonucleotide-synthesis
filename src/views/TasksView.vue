@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import TheAbout from '@/components/TheAbout.vue';
+import TheTasks from '@/components/TheTasks.vue';
 </script>
 
 <template>
-<TheAbout/>
+<TheTasks/>
 </template>
 
 <style>
